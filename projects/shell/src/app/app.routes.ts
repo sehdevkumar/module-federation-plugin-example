@@ -5,6 +5,11 @@ import { NotFoundComponent } from './not-found/not-found.component';
 // Add this import:
 import { loadRemoteModule } from '@angular-architects/native-federation';
 
+import {
+  WebComponentWrapper, WebComponentWrapperOptions
+} from '@angular-architects/module-federation-tools';
+
+
 export const APP_ROUTES: Routes = [
   {
     path: '',
@@ -21,10 +26,15 @@ export const APP_ROUTES: Routes = [
 
   {
     path: 'reacts',
-    loadComponent: () =>
-      loadRemoteModule('mfe2', './App').then((m) => m.App),
+    component: WebComponentWrapper,
+    data: {
+      type: 'module',
+      remoteEntry: 'http://localhost:4203/assets/remoteEntry.js',
+      remoteName: 'mfe2',
+      exposedModule: './App',
+      elementName: 'react-element2',
+    } as WebComponentWrapperOptions,
   },
-
   {
     path: '**',
     component: NotFoundComponent,
